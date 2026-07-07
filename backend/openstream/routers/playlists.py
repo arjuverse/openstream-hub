@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from requests import RequestException
+from httpx import HTTPError
 from sqlalchemy.orm import Session
 
 from openstream.database.session import SessionLocal
@@ -24,7 +24,7 @@ def import_playlist_endpoint(
 ):
     try:
         return import_playlist(db=db, payload=payload)
-    except RequestException as exc:
+    except HTTPError as exc:
         raise HTTPException(
             status_code=400,
             detail=f"Could not download playlist: {exc}",

@@ -4,29 +4,41 @@ from openstream.models.channel import Channel
 from openstream.schemas.channel import ParsedChannel
 
 
-def exists_by_stream_url(db: Session, stream_url: str) -> bool:
-    return db.query(Channel).filter(Channel.stream_url == stream_url).first() is not None
+def get_existing_stream_urls(db: Session, stream_urls: list[str]) -> set[str]:
+    if not stream_urls:
+        return set()
 
-
-def create_channel(
-    db: Session,
-    channel_data: ParsedChannel,
-    playlist_id: int,
-) -> Channel:
-    channel = Channel(
-        name=channel_data.name,
-        stream_url=channel_data.stream_url,
-        logo_url=channel_data.logo_url,
-        category=channel_data.category,
-        country=channel_data.country,
-        language=channel_data.language,
-        tvg_id=channel_data.tvg_id,
-        tvg_name=channel_data.tvg_name,
-        group_title=channel_data.group_title,
-        playlist_id=playlist_id,
+    rows = (
+        db.query(Channel.stream_url)
+        .filter(Channel.stream_url.in_(stream_urls))
+        .all()
     )
 
-    db.add(channel)
+    return {row[0] for row in rows}
+
+
+def bulk_create_channels(
+    db: Session,
+    channels: list[ParsedChannel],
+    playlist_id: int,
+) -> int:
+    objects = [
+        Channel(
+            name=channel.name,
+            stream_url=channel.stream_url,
+            logo_url=channel.logo_url,
+            category=channel.category,
+            country=channel.country,
+            language=channel.language,
+            tvg_id=channel.tvg_id,
+            tvg_name=channel.tvg_name,
+            group_title=channel.group_title,
+            playlist_id=playlist_id,
+        )
+        for channel in channels
+    ]
+
+    db.add_all(objects)
     db.commit()
-    db.refresh(channel)
-    return channel
+
+    return len(objects)
