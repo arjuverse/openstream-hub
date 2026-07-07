@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 
+from openstream.routers.playlists import router as playlists_router
 from openstream.core.config import settings
 from openstream.database.init_db import init_db
 
@@ -10,6 +11,8 @@ app = FastAPI(
     version=settings.app_version,
     description="Backend API for legal public IPTV streams.",
 )
+
+app.include_router(playlists_router)
 
 
 @app.get("/")
