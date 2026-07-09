@@ -3,7 +3,6 @@ from fastapi import FastAPI
 from openstream.routers.playlists import router as playlists_router
 from openstream.core.config import settings
 
-
 app = FastAPI(
     title=settings.app_name,
     version=settings.app_version,
