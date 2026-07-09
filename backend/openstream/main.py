@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
-from openstream.routers.playlists import router as playlists_router
 from openstream.core.config import settings
+from openstream.routers.playlists import router as playlists_router
 
 app = FastAPI(
     title=settings.app_name,
@@ -12,16 +12,16 @@ app = FastAPI(
 app.include_router(playlists_router)
 
 
-@app.get("/")
-def root():
+@app.get("/", tags=["Root"])
+def root() -> dict[str, str]:
     return {
         "message": "OpenStream Hub API is running",
         "docs": "/docs",
     }
 
 
-@app.get("/health")
-def health_check():
+@app.get("/health", tags=["Health"])
+def health_check() -> dict[str, str]:
     return {
         "status": "ok",
         "app": settings.app_name,
