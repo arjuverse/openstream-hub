@@ -1,13 +1,15 @@
 from pydantic import BaseModel
 
 
-class ParsedChannel(BaseModel):
+class ChannelResponse(BaseModel):
+    id: int
     name: str
     stream_url: str
-    logo_url: str | None = None
-    category: str | None = None
-    country: str | None = None
-    language: str | None = None
-    tvg_id: str | None = None
-    tvg_name: str | None = None
-    group_title: str | None = None
+    logo_url: str | None
+    country: str | None
+    language: str | None
+    category: str | None
+
+    model_config = {
+        "from_attributes": True,
+    }

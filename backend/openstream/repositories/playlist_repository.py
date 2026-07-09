@@ -22,3 +22,6 @@ class PlaylistRepository:
     def delete(self, playlist: Playlist):
         self.db.delete(playlist)
         self.db.commit()
+
+    def get_by_url(self, url: str):
+        return self.db.query(Playlist).filter(Playlist.url == url).first()

@@ -1,42 +1,20 @@
 from sqlalchemy.orm import Session
 
 from openstream.models.channel import Channel
-from openstream.schemas.channel import ParsedChannel
 
 
-def get_existing_stream_urls(db: Session, stream_urls: list[str]) -> set[str]:
-    if not stream_urls:
-        return set()
+class ChannelRepository:
+    def __init__(self, db: Session):
+        self.db = db
 
-    rows = (
-        db.query(Channel.stream_url).filter(Channel.stream_url.in_(stream_urls)).all()
-    )
+    def create(self, channel: Channel) -> None:
+        self.db.add(channel)
 
-    return {row[0] for row in rows}
+    def commit(self) -> None:
+        self.db.commit()
 
+    def get_all(self) -> list[Channel]:
+        return self.db.query(Channel).order_by(Channel.name).all()
 
-def bulk_create_channels(
-    db: Session,
-    channels: list[ParsedChannel],
-    playlist_id: int,
-) -> int:
-    objects = [
-        Channel(
-            name=channel.name,
-            stream_url=channel.stream_url,
-            logo_url=channel.logo_url,
-            category=channel.category,
-            country=channel.country,
-            language=channel.language,
-            tvg_id=channel.tvg_id,
-            tvg_name=channel.tvg_name,
-            group_title=channel.group_title,
-            playlist_id=playlist_id,
-        )
-        for channel in channels
-    ]
-
-    db.add_all(objects)
-    db.commit()
-
-    return len(objects)
+    def get(self, channel_id: int) -> Channel | None:
+        return self.db.query(Channel).filter(Channel.id == channel_id).first()

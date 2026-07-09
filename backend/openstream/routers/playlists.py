@@ -9,6 +9,12 @@ from openstream.schemas.playlist import (
 )
 from openstream.services.playlist_service import PlaylistService
 
+from openstream.schemas.imports import (
+    PlaylistImportRequest,
+    PlaylistImportResponse,
+)
+from openstream.services.import_service import import_playlist
+
 router = APIRouter(prefix="/playlists", tags=["Playlists"])
 
 
@@ -22,6 +28,14 @@ def get_db():
 
 def get_service(db: Session):
     return PlaylistService(PlaylistRepository(db))
+
+
+@router.post("/import", response_model=PlaylistImportResponse)
+def import_playlist_endpoint(
+    payload: PlaylistImportRequest,
+    db: Session = Depends(get_db),
+):
+    return import_playlist(db, payload)
 
 
 @router.get("/", response_model=list[PlaylistResponse])

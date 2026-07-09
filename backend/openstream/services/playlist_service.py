@@ -6,7 +6,11 @@ class PlaylistService:
         self.repository = repository
 
     def create(self, data):
-        playlist = Playlist(**data.model_dump())
+        playlist = Playlist(
+            name=data.name,
+            url=str(data.url),
+        )
+
         return self.repository.create(playlist)
 
     def get_all(self):
