@@ -1,13 +1,19 @@
 from pydantic import BaseModel, HttpUrl
 
 
-class PlaylistImportRequest(BaseModel):
+class PlaylistCreate(BaseModel):
     name: str
     url: HttpUrl
 
 
-class PlaylistImportResponse(BaseModel):
-    playlist_name: str
-    total_found: int
-    imported: int
-    skipped_duplicates: int
+class PlaylistUpdate(BaseModel):
+    name: str
+    url: HttpUrl
+
+
+class PlaylistResponse(BaseModel):
+    id: int
+    name: str
+    url: str
+
+    model_config = {"from_attributes": True}

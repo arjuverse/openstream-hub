@@ -3,13 +3,22 @@ from sqlalchemy.orm import Session
 from openstream.models.playlist import Playlist
 
 
-def get_by_url(db: Session, url: str) -> Playlist | None:
-    return db.query(Playlist).filter(Playlist.url == url).first()
+class PlaylistRepository:
+    def __init__(self, db: Session):
+        self.db = db
 
+    def get_all(self):
+        return self.db.query(Playlist).all()
 
-def create_playlist(db: Session, name: str, url: str) -> Playlist:
-    playlist = Playlist(name=name, url=url)
-    db.add(playlist)
-    db.commit()
-    db.refresh(playlist)
-    return playlist
+    def get(self, playlist_id: int):
+        return self.db.query(Playlist).filter(Playlist.id == playlist_id).first()
+
+    def create(self, playlist: Playlist):
+        self.db.add(playlist)
+        self.db.commit()
+        self.db.refresh(playlist)
+        return playlist
+
+    def delete(self, playlist: Playlist):
+        self.db.delete(playlist)
+        self.db.commit()
