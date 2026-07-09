@@ -22,7 +22,9 @@ class Channel(Base):
 
     tvg_id: Mapped[str | None] = mapped_column(String(255), index=True, nullable=True)
     tvg_name: Mapped[str | None] = mapped_column(String(255), nullable=True)
-    group_title: Mapped[str | None] = mapped_column(String(255), index=True, nullable=True)
+    group_title: Mapped[str | None] = mapped_column(
+        String(255), index=True, nullable=True
+    )
 
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     last_checked: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)

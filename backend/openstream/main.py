@@ -2,9 +2,7 @@ from fastapi import FastAPI
 
 from openstream.routers.playlists import router as playlists_router
 from openstream.core.config import settings
-from openstream.database.init_db import init_db
 
-init_db()
 
 app = FastAPI(
     title=settings.app_name,

@@ -2,6 +2,9 @@ from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
+from openstream.database.base import Base
+from openstream.models.channel import Channel
+from openstream.models.playlist import Playlist
 
 from alembic import context
 
@@ -18,9 +21,10 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from openstream.database.base import Base
-from openstream.models.channel import Channel
-from openstream.models.playlist import Playlist
+
+
+# Import models so SQLAlchemy registers them with Base.metadata
+_ = (Channel, Playlist)
 
 target_metadata = Base.metadata
 
@@ -68,9 +72,7 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()

@@ -9,9 +9,7 @@ def get_existing_stream_urls(db: Session, stream_urls: list[str]) -> set[str]:
         return set()
 
     rows = (
-        db.query(Channel.stream_url)
-        .filter(Channel.stream_url.in_(stream_urls))
-        .all()
+        db.query(Channel.stream_url).filter(Channel.stream_url.in_(stream_urls)).all()
     )
 
     return {row[0] for row in rows}
