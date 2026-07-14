@@ -3,7 +3,10 @@ from sqlalchemy.orm import Session
 
 from openstream.database.session import SessionLocal
 from openstream.repositories.channel_repository import ChannelRepository
-from openstream.schemas.channel import ChannelResponse
+from openstream.schemas.channel import (
+    ChannelResponse,
+    PaginatedChannelResponse,
+)
 from openstream.services.channel_service import ChannelService
 
 router = APIRouter(
@@ -20,16 +23,35 @@ def get_db():
         db.close()
 
 
-def get_service(db: Session) -> ChannelService:
+def get_service(db: Session):
     return ChannelService(ChannelRepository(db))
 
 
-@router.get("/", response_model=list[ChannelResponse])
+@router.get("/", response_model=PaginatedChannelResponse)
 def list_channels(
+    page: int = 1,
+    size: int = 50,
+    search: str | None = None,
+    group: str | None = None,
+    category: str | None = None,
+    matched: bool | None = None,
+    sort: str = "name",
+    order: str = "asc",
     db: Session = Depends(get_db),
 ):
+
     service = get_service(db)
-    return service.get_all()
+
+    return service.get_channels(
+        page=page,
+        size=size,
+        search=search,
+        group=group,
+        category=category,
+        matched=matched,
+        sort=sort,
+        order=order,
+    )
 
 
 @router.get("/{channel_id}", response_model=ChannelResponse)
@@ -37,6 +59,7 @@ def get_channel(
     channel_id: int,
     db: Session = Depends(get_db),
 ):
+
     service = get_service(db)
 
     channel = service.get(channel_id)

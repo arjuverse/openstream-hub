@@ -47,7 +47,10 @@ def import_playlist(
             tvg_id=item.get("tvg-id"),
             tvg_name=item.get("tvg-name"),
             logo_url=item.get("tvg-logo"),
+            category=item.get("group-title"),
             group_title=item.get("group-title"),
+            country=item.get("tvg-country"),
+            language=item.get("tvg-language"),
             playlist_id=playlist.id,
         )
 

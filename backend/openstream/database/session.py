@@ -13,3 +13,6 @@ SessionLocal = sessionmaker(
     autoflush=False,
     autocommit=False,
 )
+
+
+print("Database URL:", engine.url)

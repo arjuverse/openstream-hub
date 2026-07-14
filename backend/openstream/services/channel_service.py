@@ -1,4 +1,3 @@
-from openstream.models.channel import Channel
 from openstream.repositories.channel_repository import ChannelRepository
 
 
@@ -6,8 +5,8 @@ class ChannelService:
     def __init__(self, repository: ChannelRepository):
         self.repository = repository
 
-    def get_all(self) -> list[Channel]:
-        return self.repository.get_all()
+    def get_channels(self, **kwargs):
+        return self.repository.get_channels(**kwargs)
 
-    def get(self, channel_id: int) -> Channel | None:
+    def get_channel(self, channel_id: int):
         return self.repository.get(channel_id)
