@@ -6,6 +6,8 @@ from openstream.routers.playlists import router as playlists_router
 from openstream.routers.metadata import router as metadata_router
 from openstream.database.base import Base
 from openstream.database.session import engine
+from fastapi.middleware.cors import CORSMiddleware
+
 import openstream.models.epg_channel
 import openstream.models.programme
 
@@ -60,3 +62,14 @@ def debug_channels():
         "count": count,
         "first": [tuple(row) for row in first],
     }
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:5174",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
