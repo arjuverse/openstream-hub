@@ -1,46 +1,40 @@
-import { useState, useEffect } from "react";
-import type { Channel } from "@/types/channel";
+import { useState, useEffect, useCallback } from "react";
 
 const FAVORITES_KEY = "openstream_favorites";
 
 export function useFavorites() {
-  const [favorites, setFavorites] = useState<Channel[]>([]);
+  const [favoriteIds, setFavoriteIds] = useState<number[]>([]);
 
-  // Load from local storage on mount
+  // 1. Cleaner parsing logic
   useEffect(() => {
-    const stored = localStorage.getItem(FAVORITES_KEY);
-    if (stored) {
-      try {
-        setFavorites(JSON.parse(stored));
-      } catch (e) {
-        console.error("Failed to parse favorites", e);
-      }
+    try {
+      const stored = JSON.parse(
+        localStorage.getItem(FAVORITES_KEY) ?? "[]"
+      );
+      setFavoriteIds(stored);
+    } catch {
+      setFavoriteIds([]);
     }
   }, []);
 
-  // Toggle favorite status (Add if missing, remove if exists)
-  const toggleFavorite = (channel: Channel) => {
-    setFavorites((prev) => {
-      const isFavorited = prev.some((c) => c.id === channel.id);
-      let updated;
+  // 2. Toggling now only requires the ID
+  const toggleFavorite = useCallback((channelId: number) => {
+    setFavoriteIds((prev) => {
+      const isFavorited = prev.includes(channelId);
       
-      if (isFavorited) {
-        // Remove from favorites
-        updated = prev.filter((c) => c.id !== channel.id);
-      } else {
-        // Add to favorites
-        updated = [...prev, channel];
-      }
+      const updated = isFavorited
+        ? prev.filter((id) => id !== channelId)
+        : [...prev, channelId];
       
       localStorage.setItem(FAVORITES_KEY, JSON.stringify(updated));
       return updated;
     });
-  };
+  }, []);
 
-  // Helper function to quickly check if a channel is favorited
-  const isFavorite = (channelId: number) => {
-    return favorites.some((c) => c.id === channelId);
-  };
+  // 3. Lookup is simplified directly against the ID array
+  const isFavorite = useCallback((channelId: number) => {
+    return favoriteIds.includes(channelId);
+  }, [favoriteIds]);
 
-  return { favorites, toggleFavorite, isFavorite };
+  return { favoriteIds, toggleFavorite, isFavorite };
 }

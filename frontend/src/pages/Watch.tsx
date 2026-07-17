@@ -57,7 +57,7 @@ export default function Watch() {
             
             {/* Favorite Toggle Button */}
             <button
-              onClick={() => toggleFavorite(data)}
+              onClick={() => toggleFavorite(data.id)}
               className={`p-2 rounded-full transition-colors ${
                 isFav 
                   ? "text-red-500 bg-red-50 hover:bg-red-100 dark:bg-red-950/30 dark:hover:bg-red-900/50" 
