@@ -7,6 +7,7 @@ import Channels from "@/pages/Channels";
 import Guide from "@/pages/Guide";
 import Favorites from "@/pages/Favorites";
 import Settings from "@/pages/Settings";
+import Watch from "@/pages/Watch";
 
 export default function AppRouter() {
   return (
@@ -16,6 +17,7 @@ export default function AppRouter() {
       <Route element={<AppLayout />}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/channels" element={<Channels />} />
+        <Route path="/watch/:id" element={<Watch />} />
         <Route path="/guide" element={<Guide />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/settings" element={<Settings />} />

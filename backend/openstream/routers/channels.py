@@ -30,7 +30,7 @@ def get_service(db: Session):
 @router.get("/", response_model=PaginatedChannelResponse)
 def list_channels(
     page: int = 1,
-    size: int = 50,
+    size: int = 24,
     search: str | None = None,
     group: str | None = None,
     category: str | None = None,
@@ -39,7 +39,6 @@ def list_channels(
     order: str = "asc",
     db: Session = Depends(get_db),
 ):
-
     service = get_service(db)
 
     return service.get_channels(
@@ -54,12 +53,19 @@ def list_channels(
     )
 
 
+@router.get("/categories", response_model=list[str])
+def list_categories(
+    db: Session = Depends(get_db),
+):
+    service = get_service(db)
+    return service.get_categories()
+
+
 @router.get("/{channel_id}", response_model=ChannelResponse)
 def get_channel(
     channel_id: int,
     db: Session = Depends(get_db),
 ):
-
     service = get_service(db)
 
     channel = service.get(channel_id)

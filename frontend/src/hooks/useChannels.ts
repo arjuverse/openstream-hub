@@ -1,9 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
 import { getChannels } from "@/api/channels";
 
-export function useChannels(page = 1, size = 24) {
+interface UseChannelsParams {
+  page: number;
+  size: number;
+  search?: string;
+  category?: string;
+  sort?: string;
+  order?: string;
+}
+
+export function useChannels(params: UseChannelsParams) {
   return useQuery({
-    queryKey: ["channels", page, size],
-    queryFn: () => getChannels(page, size),
+    queryKey: ["channels", params],
+    queryFn: () => getChannels(params),
   });
 }

@@ -29,4 +29,4 @@ class PaginatedChannelResponse(BaseModel):
     page: int
     size: int
     total: int
-    pages: int
+    total_pages: int
