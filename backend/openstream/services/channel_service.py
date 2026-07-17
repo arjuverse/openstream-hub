@@ -48,3 +48,6 @@ class ChannelService:
             "total": total,
             "total_pages": ceil(total / size),
         }
+
+    def get_now_playing(self, epg_channel_id: int):
+        return self.repository.get_now_playing(epg_channel_id)

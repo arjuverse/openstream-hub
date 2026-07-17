@@ -1,7 +1,9 @@
-from sqlalchemy import asc, desc
+from datetime import datetime
+from sqlalchemy import and_, asc, desc
 from sqlalchemy.orm import Session
 
 from openstream.models.channel import Channel
+from openstream.models.programme import Programme
 
 
 class ChannelRepository:
@@ -84,3 +86,18 @@ class ChannelRepository:
         )
 
         return items, total
+
+    def get_now_playing(self, epg_channel_id: int):
+        now = datetime.utcnow()
+        
+        return (
+            self.db.query(Programme)
+            .filter(Programme.epg_channel_id == epg_channel_id)
+            .filter(
+                and_(
+                    Programme.start_time <= now,
+                    Programme.stop_time > now
+                )
+            )
+            .first()
+        )

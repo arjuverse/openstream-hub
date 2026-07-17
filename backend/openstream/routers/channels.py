@@ -7,6 +7,7 @@ from openstream.schemas.channel import (
     ChannelResponse,
     PaginatedChannelResponse,
 )
+from openstream.schemas.programme import ProgrammeResponse
 from openstream.services.channel_service import ChannelService
 
 router = APIRouter(
@@ -77,3 +78,27 @@ def get_channel(
         )
 
     return channel
+
+
+@router.get("/{channel_id}/now-playing", response_model=ProgrammeResponse | None)
+def get_now_playing(
+    channel_id: int,
+    db: Session = Depends(get_db),
+):
+    service = get_service(db)
+    
+    # 1. Fetch the channel using existing service logic
+    channel = service.get(channel_id)
+    
+    if channel is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Channel not found",
+        )
+        
+    # 2. If no EPG mapping exists, return None
+    if not channel.epg_channel_id:
+        return None
+        
+    # 3. Fetch the active programme
+    return service.get_now_playing(channel.epg_channel_id)
