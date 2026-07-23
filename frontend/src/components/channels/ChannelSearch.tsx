@@ -1,28 +1,17 @@
-import { Search } from "lucide-react";
+import React from "react";
+import { Input } from "@/components/ui/input";
 
 interface ChannelSearchProps {
-  value: string;
-  onChange: (value: string) => void;
+  onSearch: (query: string) => void;
 }
 
-export default function ChannelSearch({
-  value,
-  onChange,
-}: ChannelSearchProps) {
+export const ChannelSearch: React.FC<ChannelSearchProps> = ({ onSearch }) => {
   return (
-    <div className="relative w-full">
-      <Search
-        size={18}
-        className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-      />
-
-      <input
-        type="text"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
+    <div className="w-full md:w-72">
+      <Input
         placeholder="Search channels..."
-        className="w-full rounded-lg border border-gray-300 bg-white py-3 pl-10 pr-4 shadow-sm focus:border-blue-500 focus:outline-none"
+        onChange={(e) => onSearch(e.target.value)}
       />
     </div>
   );
-}
+};

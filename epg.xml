@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tv generator-info-name="OpenStream Hub EPG">
+  
+  <!-- Channel Definitions -->
+  <channel id="unite8.in">
+    <display-name>Unite8 Sports</display-name>
+    <icon src="https://via.placeholder.com/150/FF0000/FFFFFF?text=Unite8"/>
+  </channel>
+  
+  <channel id="ddsports.in">
+    <display-name>DD Sports</display-name>
+    <icon src="https://via.placeholder.com/150/0000FF/FFFFFF?text=DD+Sports"/>
+  </channel>
+
+  <!-- Program Schedules (Set to overlap with your current time so 'Live Now' triggers) -->
+  <programme start="20260721060000 +0000" stop="20260721090000 +0000" channel="unite8.in">
+    <title>FIFA World Cup 2026: Argentina vs. England (LIVE)</title>
+    <desc>Live coverage of the highly anticipated FIFA World Cup 2026 match.</desc>
+    <category>Sports</category>
+    <category>Football</category>
+  </programme>
+
+  <programme start="20260721090000 +0000" stop="20260721110000 +0000" channel="unite8.in">
+    <title>FIFA World Cup 2026: Post-Match Analysis</title>
+    <desc>Expert breakdown and highlights from the previous match.</desc>
+    <category>Sports</category>
+  </programme>
+
+  <programme start="20260721050000 +0000" stop="20260721100000 +0000" channel="ddsports.in">
+    <title>Live: Sporting Events 2026</title>
+    <desc>Continuous coverage of global sporting events.</desc>
+    <category>Sports</category>
+  </programme>
+
+</tv>

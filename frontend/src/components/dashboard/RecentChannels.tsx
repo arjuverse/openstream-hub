@@ -1,42 +1,22 @@
-import type { Channel } from "@/types/channel";
+import React from "react";
+import { Channel } from "@/types/channel";
 
-interface RecentChannelsProps {
+interface RecentChannelsRowProps {
   channels: Channel[];
 }
 
-export default function RecentChannels({
-  channels,
-}: RecentChannelsProps) {
+export const RecentChannelsRow: React.FC<RecentChannelsRowProps> = ({ channels }) => {
   return (
-    <div className="rounded-xl border bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-      <h2 className="mb-4 text-xl font-semibold">
-        Recent Channels
-      </h2>
-
-      <div className="space-y-3">
-        {channels.map((channel) => (
-          <div
-            key={channel.id}
-            className="flex items-center gap-4 rounded-lg border p-3 dark:border-zinc-800"
-          >
-            <img
-              src={channel.logo_url || "/placeholder.png"}
-              alt={channel.name}
-              className="h-10 w-10 rounded object-contain"
-            />
-
-            <div>
-              <div className="font-medium">
-                {channel.name}
-              </div>
-
-              <div className="text-sm text-zinc-500">
-                {channel.group_title ?? "Unknown"}
-              </div>
-            </div>
+    <div className="flex gap-4 overflow-x-auto pb-2">
+      {channels.length === 0 ? (
+        <p className="text-sm text-muted-foreground">No recent channels found.</p>
+      ) : (
+        channels.map((channel) => (
+          <div key={channel.id} className="min-w-[150px] bg-card border rounded-lg p-3">
+            <p className="font-medium truncate">{channel.displayName}</p>
           </div>
-        ))}
-      </div>
+        ))
+      )}
     </div>
   );
-}
+};

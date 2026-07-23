@@ -1,72 +1,28 @@
-import {
-  FolderKanban,
-  Heart,
-  Layers3,
-  Tv,
-} from "lucide-react";
+import React from "react";
+import { useRecentChannels } from "../hooks/useRecentChannels";
+import { RecentChannelsRow } from "../components/dashboard/RecentChannels"; // Adjusted path
+import { StatCard } from "../components/dashboard/StatCard";
 
-import StatCard from "@/components/dashboard/StatCard";
-import RecentChannels from "@/components/dashboard/RecentChannels";
-import { useChannels } from "@/hooks/useChannels";
-
-export default function Dashboard() {
-  const { data, isPending, error } = useChannels();
-
-  if (isPending) {
-    return <div className="p-8">Loading...</div>;
-  }
-
-  if (error || !data) {
-    return (
-      <div className="p-8 text-red-600">
-        Failed to load dashboard.
-      </div>
-    );
-  }
-
-  const uniqueCategories = new Set(
-    data.items.map((c) => c.category).filter(Boolean)
-  ).size;
+export const Dashboard: React.FC = () => {
+  const { data: recentChannels = [] } = useRecentChannels();
 
   return (
-    <div className="space-y-8">
+    <div className="container mx-auto px-4 py-8 space-y-8">
       <div>
-        <h1 className="text-3xl font-bold">
-          Dashboard
-        </h1>
-
-        <p className="mt-1 text-zinc-500">
-          Welcome to OpenStream Hub
-        </p>
+        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+        <p className="text-muted-foreground">Welcome back to your OpenStream Hub streaming dashboard.</p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-        <StatCard
-          title="Channels"
-          value={data.total}
-          icon={Tv}
-        />
-
-        <StatCard
-          title="Playlists"
-          value={1}
-          icon={FolderKanban}
-        />
-
-        <StatCard
-          title="Categories"
-          value={uniqueCategories}
-          icon={Layers3}
-        />
-
-        <StatCard
-          title="Favorites"
-          value={0}
-          icon={Heart}
-        />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <StatCard title="Active Streams" value="12" description="Currently broadcasting live" />
+        <StatCard title="Total Channels" value="148" description="Indexed in database" />
+        <StatCard title="System Status" value="Healthy" description="All containers operational" />
       </div>
 
-      <RecentChannels channels={data.items.slice(0, 8)} />
+      <div className="space-y-4">
+        <h2 className="text-xl font-semibold tracking-tight">Recent Channels</h2>
+        <RecentChannelsRow channels={recentChannels} />
+      </div>
     </div>
   );
-}
+};

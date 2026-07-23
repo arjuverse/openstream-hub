@@ -1,31 +1,17 @@
-import type { LucideIcon } from "lucide-react";
+import React from "react";
 
 interface StatCardProps {
   title: string;
-  value: number | string;
-  icon: LucideIcon;
+  value: string | number;
+  description: string;
 }
 
-export default function StatCard({
-  title,
-  value,
-  icon: Icon,
-}: StatCardProps) {
+export const StatCard: React.FC<StatCardProps> = ({ title, value, description }) => {
   return (
-    <div className="rounded-xl border bg-white p-6 shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm text-zinc-500">{title}</p>
-
-          <h3 className="mt-2 text-3xl font-bold">
-            {value}
-          </h3>
-        </div>
-
-        <div className="rounded-lg bg-zinc-100 p-3 dark:bg-zinc-800">
-          <Icon className="h-6 w-6 text-zinc-700 dark:text-zinc-200" />
-        </div>
-      </div>
+    <div className="bg-card border rounded-lg p-6 space-y-2 shadow-sm">
+      <h3 className="text-sm font-medium text-muted-foreground">{title}</h3>
+      <div className="text-2xl font-bold">{value}</div>
+      <p className="text-xs text-muted-foreground">{description}</p>
     </div>
   );
-}
+};
